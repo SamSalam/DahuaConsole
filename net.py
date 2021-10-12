@@ -481,21 +481,14 @@ sock.close()
 
         self.DeviceClass = \
             dh_data.get('magicBox.getDeviceClass').get('params').get('type') \
-            if dh_data.get('magicBox.getDeviceClass').get('result') else '(null)'
-        self.DeviceType = \
-            dh_data.get('magicBox.getDeviceType').get('params').get('type')\
-            if dh_data.get('magicBox.getDeviceType').get('result') else '(null)'
-        if dh_data.get('global.getCurrentTime').get('params'):
-            remote_time = dh_data.get('global.getCurrentTime').get('params').get('time')
-        elif dh_data.get('global.getCurrentTime').get('result'):
-            remote_time = dh_data.get('global.getCurrentTime').get('result')
-        else:
-            remote_time = '(null)'
+            if not dh_data.get('magicBox.getDeviceClass').get('error') else False
+        self.DeviceType = dh_data.get('magicBox.getDeviceType').get('params').get('type')
 
         log.info("Remote Model: {}, Class: {}, Time: {}".format(
             self.DeviceType,
             self.DeviceClass,
-            remote_time
+            dh_data.get('global.getCurrentTime').get('params').get('time')
+            if dh_data.get('global.getCurrentTime') else '(null)',
         ))
 
         if self.args.dump:
